@@ -17,10 +17,10 @@ import java.time.LocalDate;
 @Setter
 public class Reservation {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private LocalDate from;
-    private LocalDate to;
+    private LocalDate bookedFrom;
+    private LocalDate bookedTo;
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
