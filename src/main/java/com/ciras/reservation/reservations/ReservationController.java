@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/reservations")
 @RequiredArgsConstructor
+@RequestMapping("/reservations")
 public class ReservationController {
     private final ReservationService reservationService;
 
@@ -32,9 +32,10 @@ public class ReservationController {
     }
 
     @PutMapping("/{id}")
-    public Reservation addReservation(@PathVariable Long id,@RequestBody AddReservationRequest addReservationRequest) {
+    public Reservation addReservation(@PathVariable Long id, @RequestBody AddReservationRequest addReservationRequest) {
         return reservationService.updateReservation(id, addReservationRequest);
     }
+
     @GetMapping("/{id}")
     public Reservation getReservation(@PathVariable Long id) {
         return reservationService.getReservation(id);

@@ -13,6 +13,9 @@ import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
@@ -32,7 +35,14 @@ public class WebSecurityConfiguration {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .httpBasic().and().csrf().disable();
+                .httpBasic().and()
+                .csrf().disable().cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(request -> {
+                    CorsConfiguration corsConfiguration = new CorsConfiguration();
+                    corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
+                    corsConfiguration.setAllowCredentials(true);
+                    corsConfiguration.setAllowedMethods(List.of("GET", "DELETE", "PUT", "POST"));
+                    return corsConfiguration.applyPermitDefaultValues();
+                }));
         return http.build();
     }
 

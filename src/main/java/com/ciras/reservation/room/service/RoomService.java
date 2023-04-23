@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -37,5 +39,9 @@ public class RoomService {
 
     public Room getRoom(Long id) {
         return roomRepository.findById(id).orElseThrow(() -> new RuntimeException("Room not found"));
+    }
+
+    public List<Room> getAvailableRooms(Date from, Date to) {
+        return roomRepository.getAvailableRooms(from, to);
     }
 }

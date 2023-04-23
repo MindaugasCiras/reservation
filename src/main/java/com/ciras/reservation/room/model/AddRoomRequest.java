@@ -6,6 +6,7 @@ import lombok.Data;
 public class AddRoomRequest {
     private String name;
     private double sizeSqm;
+    private String imageUrl;
     private int capacity;
     private int bedCount;
 }

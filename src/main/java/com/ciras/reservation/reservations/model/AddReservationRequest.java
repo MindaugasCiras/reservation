@@ -2,12 +2,12 @@ package com.ciras.reservation.reservations.model;
 
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 public class AddReservationRequest {
-    private LocalDate from;
-    private LocalDate to;
+    private Date bookedFrom;
+    private Date bookedTo;
     private Long roomId;
     private String comment;
     private boolean breakfast;
