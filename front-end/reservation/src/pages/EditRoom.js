@@ -6,10 +6,13 @@ import {
   Form,
   Input,
   InputNumber,
+  message,
   notification,
+  Popconfirm,
   Row,
 } from "antd";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { deleteRoom, getRoom, updateRoom } from "../service/RoomService";
 
@@ -18,8 +21,9 @@ export default function EditRoom() {
   const [room, setRoom] = useState({});
   const [form] = Form.useForm();
   const imageUrl = Form.useWatch("imageUrl", { form });
-  const [api, contextHolder] = notification.useNotification();
   const nav = useNavigate();
+
+  const { t } = useTranslation();
   useEffect(() => {
     fetchRoom();
 
@@ -33,22 +37,16 @@ export default function EditRoom() {
 
   const onFinish = async (values) => {
     await updateRoom(room.id, values);
-    api.open({
-      message: "Room updated",
-      duration: 2,
-      onClose: () => {
-        fetchRoom();
-      },
-    });
+    message.success(t("messages.updated"));
   };
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
+    message.error(t("messages.error"));
   };
   return (
     <>
-      <Divider orientation="left">Edit room</Divider>
-      {contextHolder}
+      <Divider orientation="left">{t("editRoom.divider")}</Divider>
       <Row gutter={16}>
         <Col span={12}>
           <Form
@@ -60,76 +58,108 @@ export default function EditRoom() {
             layout="vertical"
           >
             <Form.Item
-              label="Room name"
+              label={t("editRoom.roomName")}
               name="name"
-              rules={[{ required: true, message: "Please input room name!" }]}
+              rules={[
+                {
+                  required: true,
+                  message: t("editRoom.validation.nameRequired"),
+                },
+              ]}
             >
               <Input />
             </Form.Item>
             <Form.Item
-              label="Image url"
+              label={t("editRoom.imageUrl")}
               name="imageUrl"
-              rules={[{ required: true, message: "Please input image url!" }]}
+              rules={[
+                {
+                  required: true,
+                  message: t("editRoom.validation.imageRequired"),
+                },
+                {
+                  type: "url",
+                  warningOnly: true,
+                  message: t("editRoom.validation.url"),
+                },
+              ]}
             >
               <Input />
             </Form.Item>
             <Form.Item
-              label="Size sqm"
+              label={t("editRoom.size")}
               name="sizeSqm"
               rules={[
                 {
                   required: true,
-                  message: "Please input size in square meters!",
+                  message: t("editRoom.validation.sizeRequired"),
                 },
               ]}
             >
               <InputNumber min={5} />
             </Form.Item>
             <Form.Item
-              label="Capacity"
+              label={t("editRoom.capacity")}
               name="capacity"
               rules={[
-                { required: true, message: "Please input room capacity!" },
+                {
+                  required: true,
+                  message: t("editRoom.validation.capacityRequired"),
+                },
               ]}
             >
               <InputNumber min={1} />
             </Form.Item>
             <Form.Item
-              label="Bed count"
+              label={t("editRoom.bedCount")}
               name="bedCount"
               rules={[
-                { required: true, message: "Please input your password!" },
+                {
+                  required: true,
+                  message: t("editRoom.validation.bedCountRequired"),
+                },
               ]}
             >
               <InputNumber min={1} />
+            </Form.Item>
+            <Form.Item
+              label={t("editRoom.price")}
+              name="price"
+              rules={[
+                {
+                  required: true,
+                  message: t("editRoom.validation.priceRequired"),
+                },
+              ]}
+            >
+              <InputNumber min={0} />
             </Form.Item>
             <Row justify="space-between">
               <Col flex="auto">
                 <Form.Item>
                   <Button block type="primary" htmlType="submit">
-                    Save
+                    {t("editRoom.buttonUpdate")}
                   </Button>
                 </Form.Item>
               </Col>
               <Col flex="auto" />
               <Col flex="auto">
                 <Form.Item>
-                  <Button
-                    block
-                    danger
-                    onClick={async () => {
+                  <Popconfirm
+                    title={t("editRoom.deleteConfirmation.title")}
+                    description={t("editRoom.deleteConfirmation.description")}
+                    okText={t("yes")}
+                    cancelText={t("no")}
+                    onConfirm={async () => {
                       await deleteRoom(room.id);
-                      api.open({
-                        message: "Room deleted",
-                        duration: 2,
-                        onClose: () => {
-                          nav("..");
-                        },
-                      });
+                      message.success(t("messages.deleted"));
+                      nav("..");
                     }}
                   >
-                    Delete
-                  </Button>
+                    <Button block danger>
+                      {t("editRoom.buttonDelete")}
+                    </Button>
+                  </Popconfirm>
                 </Form.Item>
               </Col>
             </Row>
@@ -145,7 +175,6 @@ export default function EditRoom() {
   function fetchRoom() {
     getRoom(roomId).then((res) => {
       setRoom(res.data);
-      console.log(res.data);
     });
   }
 }

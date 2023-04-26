@@ -1,24 +1,19 @@
-import { Layout, Menu, notification, Space } from "antd";
+import { Layout, Menu, notification, Select, Space } from "antd";
 import {
   AppstoreOutlined,
   MailOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
+import dayjs from 'dayjs';
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Outlet,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { AuthenticationContext } from "../context";
-import { Content, Header } from "antd/es/layout/layout";
-import { isAdmin } from "../utils/auhtUtils";
+import { useTranslation } from "react-i18next";
 export default function HomePage() {
   const [api, contextHolder] = notification.useNotification();
   const { authData, setAuthData } = useContext(AuthenticationContext);
   const nav = useNavigate();
+  const { t, i18n } = useTranslation();
   useEffect(() => {
     if (authData.loggedIn !== true) {
       nav("/log-in");
@@ -34,46 +29,63 @@ export default function HomePage() {
       setAuthData({});
       return;
     }
-    nav(e.key);
+    if (e.key != "") {
+      nav(e.key);
+    }
   };
   let items = [];
   if (authData.isAdmin) {
     items = [
       {
-        label: "Reservations",
+        label: t("navBar.reservations"),
         key: "reservations",
       },
       {
-        label: "Rooms",
+        label: t("navBar.rooms"),
         key: "rooms",
       },
       {
-        label: "Users",
+        label: t("navBar.users"),
         key: "users",
-      },
-      {
-        label: "Logout",
-        key: "logout",
-        danger: true,
       },
     ];
   } else {
     items = [
       {
-        label: "Search",
+        label: t("navBar.search"),
         key: "search",
       },
       {
-        label: "Reservations",
+        label: t("navBar.reservations"),
         key: "reservations",
-      },
-      {
-        label: "Logout",
-        key: "logout",
-        danger: true,
       },
     ];
   }
+  items = [
+    ...items,
+    {
+      label: t("navBar.logout"),
+      key: "logout",
+      danger: true,
+    },
+    {
+      label: (
+        <Select
+          defaultValue={i18n.resolvedLanguage}
+          onChange={(value) => {
+            i18n.changeLanguage(value);
+            dayjs.locale(value)
+          }}
+          style={{ width: 120 }}
+          options={[
+            { value: "en", label: "English" },
+            { value: "lt", label: "Lietuviu" },
+          ]}
+        />
+      ),
+      key: "",
+    },
+  ];
   const currentTab =
     location.pathname != "/" ? location.pathname.split("/")[1] : items[0].key;
   return (

@@ -6,10 +6,12 @@ import {
   Form,
   Input,
   InputNumber,
+  message,
   notification,
   Row,
 } from "antd";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { getRoom, createRoom } from "../service/RoomService";
 
@@ -17,17 +19,13 @@ export default function CreateRoom() {
   const [form] = Form.useForm();
   const [api, contextHolder] = notification.useNotification();
 
+  const { t } = useTranslation();
   const nav = useNavigate();
   const imageUrl = Form.useWatch("imageUrl", { form });
   const onFinish = async (values) => {
     await createRoom(values);
-    api.open({
-      message: "Room created",
-      duration: 2,
-      onClose: () => {
-        nav("..");
-      },
-    });
+    message.success(t("messages.created"));
+    nav("..");
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -36,7 +34,7 @@ export default function CreateRoom() {
   return (
     <>
       {contextHolder}
-      <Divider orientation="left">Create room</Divider>
+      <Divider orientation="left">{t("createRoom.divider")}</Divider>
 
       <Row gutter={16}>
         <Col span={12}>
@@ -49,54 +47,87 @@ export default function CreateRoom() {
             layout="vertical"
           >
             <Form.Item
-              label="Room name"
+              label={t("editRoom.roomName")}
               name="name"
-              rules={[{ required: true, message: "Please input room name!" }]}
+              rules={[
+                {
+                  required: true,
+                  message: t("editRoom.validation.nameRequired"),
+                },
+              ]}
             >
               <Input />
             </Form.Item>
             <Form.Item
-              label="Image url"
+              label={t("editRoom.imageUrl")}
               name="imageUrl"
-              rules={[{ required: true, message: "Please input image url!" }]}
+              rules={[
+                {
+                  required: true,
+                  message: t("editRoom.validation.imageRequired"),
+                },
+                {
+                  type: "url",
+                  warningOnly: true,
+                  message: t("editRoom.validation.url"),
+                },
+              ]}
             >
               <Input />
             </Form.Item>
             <Form.Item
-              label="Size sqm"
+              label={t("editRoom.size")}
               name="sizeSqm"
               rules={[
                 {
                   required: true,
-                  message: "Please input size in square meters!",
+                  message: t("editRoom.validation.sizeRequired"),
                 },
               ]}
             >
-              <InputNumber min={5} />
+              <InputNumber min={5} style={{ width: "100%" }} />
             </Form.Item>
             <Form.Item
-              label="Capacity"
+              label={t("editRoom.capacity")}
               name="capacity"
               rules={[
-                { required: true, message: "Please input room capacity!" },
+                {
+                  required: true,
+                  message: t("editRoom.validation.capacityRequired"),
+                },
               ]}
             >
-              <InputNumber min={1} />
+              <InputNumber min={1} style={{ width: "100%" }} />
             </Form.Item>
             <Form.Item
-              label="Bed count"
+              label={t("editRoom.bedCount")}
               name="bedCount"
               rules={[
-                { required: true, message: "Please input your password!" },
+                {
+                  required: true,
+                  message: t("editRoom.validation.bedCountRequired"),
+                },
               ]}
             >
-              <InputNumber min={1} />
+              <InputNumber min={1} style={{ width: "100%" }} />
+            </Form.Item>
+            <Form.Item
+              label={t("editRoom.price")}
+              name="price"
+              rules={[
+                {
+                  required: true,
+                  message: t("editRoom.validation.priceRequired"),
+                },
+              ]}
+            >
+              <InputNumber min={0} style={{ width: "100%" }} />
             </Form.Item>
             <Row justify="space-around">
               <Col span={10}>
                 <Form.Item>
                   <Button block type="primary" htmlType="submit">
-                    Create
+                    {t("editRoom.buttonCreate")}
                   </Button>
                 </Form.Item>
               </Col>

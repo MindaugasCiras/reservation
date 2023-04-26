@@ -1,4 +1,4 @@
-import { Card, Space } from "antd";
+import { Card, Col, Row, Space } from "antd";
 import Meta from "antd/es/card/Meta";
 import React from "react";
 import {
@@ -24,24 +24,32 @@ export default function RoomCard(props) {
       }
     >
       <Meta
-        title={room.name}
+        title={
+          <Row justify={"space-between"}>
+            <Col flex={"auto"}>{room.name}</Col>
+            <Col>{room.price} $</Col>
+          </Row>
+        }
         description={
-          <Space direction="horizontal">
-            <Space>
-              <UserOutlined />
-              <span>{room.capacity}</span>
+          <>
+            <Row></Row>
+            <Space direction="horizontal">
+              <Space>
+                <UserOutlined />
+                <span>{room.capacity}</span>
+              </Space>
+              |
+              <Space>
+                <FullscreenOutlined />
+                <span>{room.sizeSqm}m2</span>
+              </Space>
+              |
+              <Space>
+                <BarcodeOutlined />
+                <span>{room.bedCount}</span>
+              </Space>
             </Space>
-            |
-            <Space>
-              <FullscreenOutlined />
-              <span>{room.sizeSqm} m2</span>
-            </Space>
-            |
-            <Space>
-              <BarcodeOutlined />
-              <span>{room.bedCount}</span>
-            </Space>
-          </Space>
+          </>
         }
       />
     </Card>

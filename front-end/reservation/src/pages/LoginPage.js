@@ -4,14 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { loginUser } from "../service/AuthService";
 import { AuthenticationContext } from "../context";
 import { isAdmin } from "../utils/auhtUtils";
+import { useTranslation } from "react-i18next";
 
 export default function LoginPage() {
   const { authData, setAuthData } = useContext(AuthenticationContext);
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const onFinish = async (values) => {
-    console.log("Success:", values);
     const res = await loginUser(values);
-    console.log(res);
     if (res.status == 200) {
       const auth = { loggedIn: true, ...res.data };
       setAuthData({ ...auth, isAdmin: isAdmin(auth) });
@@ -34,11 +34,11 @@ export default function LoginPage() {
         position: "absolute",
       }}
     >
-      <Card title="Login">
+      <Card title={t('auth.login')}>
         <Form
           name="basic"
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 16 }}
+          labelCol={{ span: 10 }}
+          wrapperCol={{ span: 14 }}
           style={{ maxWidth: 600 }}
           initialValues={{ remember: true }}
           onFinish={onFinish}
@@ -46,7 +46,7 @@ export default function LoginPage() {
           autoComplete="off"
         >
           <Form.Item
-            label="Username"
+            label={t('auth.username')}
             name="username"
             rules={[{ required: true, message: "Please input your username!" }]}
           >
@@ -54,7 +54,7 @@ export default function LoginPage() {
           </Form.Item>
 
           <Form.Item
-            label="Password"
+            label={t('auth.password')}
             name="password"
             rules={[{ required: true, message: "Please input your password!" }]}
           >
@@ -67,7 +67,7 @@ export default function LoginPage() {
             <Col>
               <Form.Item noStyle>
                 <Button type="primary" htmlType="submit">
-                  Login
+                 {t('auth.loginButton')}
                 </Button>
               </Form.Item>
             </Col>
@@ -79,7 +79,7 @@ export default function LoginPage() {
                     navigate("/register");
                   }}
                 >
-                  Register
+                 {t('auth.registerButton')}
                 </Button>
               </Form.Item>
             </Col>

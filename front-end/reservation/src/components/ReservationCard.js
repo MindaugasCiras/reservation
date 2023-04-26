@@ -1,4 +1,4 @@
-import { Button, Card, Col, Row, Space } from "antd";
+import { Button, Card, Col, message, Popconfirm, Row, Space } from "antd";
 import Meta from "antd/es/card/Meta";
 import React from "react";
 import {
@@ -7,8 +7,10 @@ import {
   BarcodeOutlined,
 } from "@ant-design/icons";
 import { revokeReservation } from "../service/ReservationService";
+import { useTranslation } from "react-i18next";
 
 export default function ReservationCard(props) {
+  const { t } = useTranslation();
   const { reservation } = props;
   const room = reservation.room;
   return (
@@ -26,7 +28,12 @@ export default function ReservationCard(props) {
       }
     >
       <Meta
-        title={room.name}
+        title={
+          <Row justify={"space-between"}>
+            <Col flex={"auto"}>{room.name}</Col>
+            <Col>{reservation.price} $</Col>
+          </Row>
+        }
         description={
           <>
             <Space direction="horizontal">
@@ -46,36 +53,45 @@ export default function ReservationCard(props) {
               </Space>
             </Space>
             <Row>
-              <Col span={6}>User</Col>
-              <Col span={12}>{reservation.user.username}</Col>
+              <Col span={12}>{t("reservations.card.user")}</Col>
+              <Col flex={"auto"}>{reservation.user.username}</Col>
             </Row>
             <Row>
-              <Col span={6}>From</Col>
-              <Col span={12}>{reservation.bookedFrom.split("T")[0]}</Col>
+              <Col span={12}>{t("reservations.card.fromDate")}</Col>
+              <Col flex={"auto"}>{reservation.bookedFrom.split("T")[0]}</Col>
             </Row>
             <Row>
-              <Col span={6}>To</Col>
+              <Col span={12}>{t("reservations.card.toDate")}</Col>
               <Col span={12}>{reservation.bookedTo.split("T")[0]}</Col>
             </Row>
             <Row>
-              <Col span={12}>Breakfast</Col>
-              <Col span={12}>{reservation.breakfast.toString()}</Col>
+              <Col span={12}>{t("reservations.card.breakfast")}</Col>
+              <Col flex={"auto"}>{t(reservation.breakfast.toString())}</Col>
             </Row>
             <Row>
-              <Col span={12}>Daily clean</Col>
-              <Col span={12}>{reservation.dailyCleaning.toString()}</Col>
+              <Col span={12}>{t("reservations.card.dailyClean")}</Col>
+              <Col flex={"auto"}>{t(reservation.dailyCleaning.toString())}</Col>
             </Row>
             <Row justify={"center"}>
-              <Button
-                danger
-                onClick={() => {
+              <Popconfirm
+                title={t("reservations.card.revokeConfirmation.title")}
+                description={t(
+                  "reservations.card.revokeConfirmation.description"
+                )}
+                okText={t("yes")}
+                cancelText={t("no")}
+                placement="bottom"
+                onConfirm={async () => {
                   revokeReservation(reservation.id).then((_) => {
+                    message.success(t("messages.revoked"));
                     props.onRevoke();
                   });
                 }}
               >
-                Revoke
-              </Button>
+                <Button block danger>
+                  {t("reservations.card.revoke")}
+                </Button>
+              </Popconfirm>
             </Row>
           </>
         }

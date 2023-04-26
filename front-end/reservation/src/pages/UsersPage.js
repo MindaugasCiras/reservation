@@ -1,7 +1,8 @@
-import { Button, Card, Col, Divider, Row } from "antd";
+import { Button, Card, Col, Divider, message, Popconfirm, Row } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { deleteUser, getUsers } from "../service/UserService";
+import { useTranslation } from "react-i18next";
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
@@ -10,6 +11,7 @@ export default function UsersPage() {
     return () => {};
   }, []);
 
+  const { t } = useTranslation();
   function updateUsers() {
     getUsers().then((data) => {
       setUsers(data.data);
@@ -17,23 +19,34 @@ export default function UsersPage() {
   }
   return (
     <>
-      <Divider orientation="left">Users</Divider>
+      <Divider orientation="left">{t("users.divider")}</Divider>
       <Row gutter={[16, 16]}>
         {users.map((user, index) => {
           return (
-            <Col span={4} key={index}>
+            <Col xs={24} sm={12} lg={6} key={index}>
               <Card
                 title={
                   <Row justify="space-between" align="middle">
                     <Col>{user.username}</Col>
                     <Col>
-                      <Button
-                        icon=<DeleteOutlined style={{ color: "red" }} />
-                        onClick={async () => {
+                      <Popconfirm
+                        title={t("users.deletionConfirmation.title")}
+                        description={t(
+                          "users.deletionConfirmation.description"
+                        )}
+                        okText={t("yes")}
+                        cancelText={t("no")}
+                        placement="bottom"
+                        onConfirm={async () => {
                           await deleteUser(user.id);
+                          message.success("Deleted");
                           updateUsers();
                         }}
-                      />
+                      >
+                        <Button
+                          icon=<DeleteOutlined style={{ color: "red" }} />
+                        />
+                      </Popconfirm>
                     </Col>
                   </Row>
                 }

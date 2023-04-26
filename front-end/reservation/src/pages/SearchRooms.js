@@ -1,5 +1,6 @@
 import { Col, Row, DatePicker, Space, Button, Divider } from "antd";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, Outlet } from "react-router-dom";
 import RoomCard from "../components/RoomCard";
 import { getAvailableRooms } from "../service/RoomService";
@@ -26,9 +27,10 @@ export default function SearchRooms() {
     setRooms(roomsRes.data);
   };
 
+  const { t } = useTranslation();
   return (
     <>
-      <Divider orientation="left">Search rooms</Divider>
+      <Divider orientation="left">{t("search.divider")}</Divider>
       <Row justify="center" gutter={16} align="middle">
         <Col>
           <RangePicker
@@ -40,14 +42,14 @@ export default function SearchRooms() {
         </Col>
         <Col>
           <Button type="primary" onClick={fetchRooms}>
-            Search
+          {t("search.searchButton")}
           </Button>
         </Col>
       </Row>
       <div style={{ height: "20px" }}></div>
       <Row gutter={[16, 16]}>
         {rooms.map((room) => (
-          <Col span={6}>
+          <Col xs={24} sm={12} lg={8} >
             <Link
               to={`/search/${room.id}/book?from=${value[0].format(
                 "YYYY-MM-DD"

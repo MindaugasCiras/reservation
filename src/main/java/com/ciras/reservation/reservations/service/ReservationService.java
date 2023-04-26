@@ -12,7 +12,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 
+import java.math.BigInteger;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +38,14 @@ public class ReservationService {
         BeanUtils.copyProperties(addReservationRequest, reservation);
         reservation.setRoom(room);
         reservation.setUser(SecurityUtil.getUser());
+        long differenceInDays = getDifferenceInDays(addReservationRequest);
+        reservation.setPrice(room.getPrice().multiply(BigInteger.valueOf(differenceInDays)));
         return reservationRepository.save(reservation);
+    }
+
+    private static long getDifferenceInDays(AddReservationRequest addReservationRequest) {
+        long diff = addReservationRequest.getBookedTo().getTime() - addReservationRequest.getBookedFrom().getTime();
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
     public void deleteReservation(Long id) {

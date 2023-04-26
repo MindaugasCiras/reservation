@@ -1,15 +1,18 @@
 import React from "react";
-import { Button, Checkbox, Form, Input, Card, Space, Row, Col } from "antd";
+import { Button, Checkbox, Form, Input, Card, Space, Row, Col, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../service/AuthService";
+import { useTranslation } from "react-i18next";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
   const onFinish = async (values) => {
-    console.log("Success:", values);
     const res = await registerUser(values);
-    if(res.status == 200){
-        navigate("/log-in")
+    if (res.status == 200) {
+      message.success(t("messages.registered"))
+      navigate("/log-in");
     }
   };
 
@@ -28,47 +31,47 @@ export default function RegisterPage() {
         position: "absolute",
       }}
     >
-      <Card title="Register">
+      <Card title={t("auth.register")}>
         <Form
           name="basic"
           labelCol={{ span: 10 }}
-          wrapperCol={{ span: 16 }}
-          style={{ maxWidth: 700 }}
+          wrapperCol={{ span: 14 }}
+          style={{ maxWidth: 600 }}
           initialValues={{ remember: true }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
           <Form.Item
-            label="Username"
+            label={t("auth.username")}
             name="username"
             rules={[
-              { required: true, message: "Please input your username!" },
-              { min: 4, message: "Username too short" },
+              { required: true, message: t("auth.validation.username.required") },
+              { min: 4, message: t("auth.validation.username.tooShort") },
             ]}
           >
-            <Input placeholder="Username" />
+            <Input placeholder={t("auth.username")} />
           </Form.Item>
 
           <Form.Item
-            label="Password"
+            label={t("auth.password")}
             name="password"
             rules={[
-              { required: true, message: "Please input your password!" },
-              { min: 6, message: "Password too short" },
+              { required: true, message: t("auth.validation.password.required") },
+              { min: 6, message: t("auth.validation.password.tooShort") },
             ]}
           >
-            <Input.Password placeholder="Password" />
+            <Input.Password placeholder={t("auth.password")} />
           </Form.Item>
           <Form.Item
-            label="Repeat password"
+            label={t("auth.repeatPassword")}
             name="repeat_password"
             dependencies={["password"]}
             hasFeedback
             rules={[
               {
                 required: true,
-                message: "Please confirm your password!",
+                message: t("auth.validation.repeatPassword.required"),
               },
               ({ getFieldValue }) => ({
                 validator(_, value) {
@@ -77,20 +80,20 @@ export default function RegisterPage() {
                   }
                   return Promise.reject(
                     new Error(
-                      "The two passwords that you entered do not match!"
+                      t("auth.validation.repeatPassword.noMatch")
                     )
                   );
                 },
               }),
             ]}
           >
-            <Input.Password placeholder="Repeat password" />
+            <Input.Password placeholder={t("auth.repeatPassword")} />
           </Form.Item>
           <Row justify="center" gutter={16}>
             <Col>
               <Form.Item noStyle>
                 <Button type="primary" htmlType="submit">
-                  Register
+                {t("auth.registerButton")}
                 </Button>
               </Form.Item>
             </Col>
@@ -101,8 +104,7 @@ export default function RegisterPage() {
                   onClick={() => {
                     navigate("/log-in");
                   }}
-                >
-                  Log in
+                >{t("auth.loginButton")}
                 </Button>
               </Form.Item>
             </Col>
