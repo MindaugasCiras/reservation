@@ -14,6 +14,7 @@ import org.springframework.web.client.RestClientException;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -21,6 +22,11 @@ import java.util.concurrent.TimeUnit;
 public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final RoomService roomService;
+
+    private static long getDifferenceInDays(AddReservationRequest addReservationRequest) {
+        long diff = addReservationRequest.getBookedTo().getTime() - addReservationRequest.getBookedFrom().getTime();
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+    }
 
     public List<Reservation> getAllReservations() {
         if (SecurityUtil.isAdmin()) {
@@ -43,13 +49,16 @@ public class ReservationService {
         return reservationRepository.save(reservation);
     }
 
-    private static long getDifferenceInDays(AddReservationRequest addReservationRequest) {
-        long diff = addReservationRequest.getBookedTo().getTime() - addReservationRequest.getBookedFrom().getTime();
-        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-    }
-
     public void deleteReservation(Long id) {
-        reservationRepository.deleteById(id);
+        reservationRepository.findById(id).ifPresent(reservation -> {
+            if (!SecurityUtil.isAdmin()) {
+                User user = SecurityUtil.getUser();
+                if (!Objects.equals(reservation.getUser().getId(), user.getId())) {
+                    return;
+                }
+            }
+            reservationRepository.delete(reservation);
+        });
     }
 
     public Reservation updateReservation(Long id, AddReservationRequest addReservationRequest) {

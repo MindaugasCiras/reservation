@@ -16,10 +16,10 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import RoomCard from "../components/RoomCard";
 import { bookRoom } from "../service/ReservationService";
+import dayjs from "dayjs";
 import { deleteRoom, getRoom, updateRoom } from "../service/RoomService";
 
 export default function BookRoom() {
-
   const { t } = useTranslation();
   const { roomId } = useParams();
   const [room, setRoom] = useState();
@@ -69,7 +69,7 @@ export default function BookRoom() {
               <Col flex="auto">
                 <Form.Item>
                   <Button block type="primary" htmlType="submit">
-                  {t("bookRoom.buttonBookNow")}
+                    {t("bookRoom.buttonBookNow")}
                   </Button>
                 </Form.Item>
               </Col>
@@ -82,8 +82,11 @@ export default function BookRoom() {
 
   function fetchRoom() {
     getRoom(roomId).then((res) => {
-      setRoom(res.data);
-      console.log(res.data);
+      const url = new URL(window.location.href);
+      const bookedFrom = dayjs(url.searchParams.get("from"));
+      const bookedTo = dayjs(url.searchParams.get("to"));
+      const price = res.data.price * bookedTo.diff(bookedFrom, 'd');
+      setRoom({...res.data, price});
     });
   }
 }

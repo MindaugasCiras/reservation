@@ -11,6 +11,7 @@ export default function RoomCard(props) {
   const { room } = props;
   return (
     <Card
+    style={{ height: "100%" }}
       hoverable
       cover={
         imageExists(room.imageUrl) ? (
@@ -32,23 +33,22 @@ export default function RoomCard(props) {
         }
         description={
           <>
-            <Row></Row>
-            <Space direction="horizontal">
-              <Space>
+            <Row justify={"space-evenly"}>
+              |<Col>
                 <UserOutlined />
                 <span>{room.capacity}</span>
-              </Space>
+              </Col>
               |
-              <Space>
+              <Col>
                 <FullscreenOutlined />
-                <span>{room.sizeSqm}m2</span>
-              </Space>
+                <span>{room.sizeSqm} m2</span>
+              </Col>
               |
-              <Space>
+              <Col>
                 <BarcodeOutlined />
                 <span>{room.bedCount}</span>
-              </Space>
-            </Space>
+              </Col>|
+            </Row>
           </>
         }
       />
@@ -56,13 +56,9 @@ export default function RoomCard(props) {
   );
 
   function imageExists(image_url) {
-    if (!image_url.includes("http")) {
+    if (image_url && !image_url.includes("http")) {
       return false;
     }
-    var http = new XMLHttpRequest();
-
-    http.open("HEAD", image_url, false);
-    http.send();
-    return http.status == 200;
+    return true;
   }
 }

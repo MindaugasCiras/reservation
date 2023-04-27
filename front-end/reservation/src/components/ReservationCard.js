@@ -15,6 +15,7 @@ export default function ReservationCard(props) {
   const room = reservation.room;
   return (
     <Card
+      style={{ height: "100%" }}
       hoverable
       cover={
         imageExists(room.imageUrl) ? (
@@ -36,22 +37,22 @@ export default function ReservationCard(props) {
         }
         description={
           <>
-            <Space direction="horizontal">
-              <Space>
+            <Row justify={"space-evenly"}>
+              |<Col>
                 <UserOutlined />
                 <span>{room.capacity}</span>
-              </Space>
+              </Col>
               |
-              <Space>
+              <Col>
                 <FullscreenOutlined />
                 <span>{room.sizeSqm} m2</span>
-              </Space>
+              </Col>
               |
-              <Space>
+              <Col>
                 <BarcodeOutlined />
                 <span>{room.bedCount}</span>
-              </Space>
-            </Space>
+              </Col>|
+            </Row>
             <Row>
               <Col span={12}>{t("reservations.card.user")}</Col>
               <Col flex={"auto"}>{reservation.user.username}</Col>
@@ -64,14 +65,23 @@ export default function ReservationCard(props) {
               <Col span={12}>{t("reservations.card.toDate")}</Col>
               <Col span={12}>{reservation.bookedTo.split("T")[0]}</Col>
             </Row>
-            <Row>
-              <Col span={12}>{t("reservations.card.breakfast")}</Col>
-              <Col flex={"auto"}>{t(reservation.breakfast.toString())}</Col>
-            </Row>
-            <Row>
-              <Col span={12}>{t("reservations.card.dailyClean")}</Col>
-              <Col flex={"auto"}>{t(reservation.dailyCleaning.toString())}</Col>
-            </Row>
+            {reservation.breakfast && (
+              <Row>
+                <Col span={12}>{t("reservations.card.breakfast")}</Col>
+              </Row>
+            )}
+            {reservation.dailyCleaning && (
+              <Row>
+                <Col span={12}>{t("reservations.card.dailyClean")}</Col>
+              </Row>
+            )}
+            {reservation.comment && (
+              <Row>
+                <Col span={12}>{t("reservations.card.comment")}</Col>
+                <Col flex={"auto"}>{t(reservation.comment)}</Col>
+              </Row>
+            )}
+            <div style={{ height: "10px" }} />
             <Row justify={"center"}>
               <Popconfirm
                 title={t("reservations.card.revokeConfirmation.title")}
@@ -100,13 +110,9 @@ export default function ReservationCard(props) {
   );
 
   function imageExists(image_url) {
-    if (!image_url.includes("http")) {
+    if (image_url && !image_url.includes("http")) {
       return false;
     }
-    var http = new XMLHttpRequest();
-
-    http.open("HEAD", image_url, false);
-    http.send();
-    return http.status == 200;
+    return true;
   }
 }

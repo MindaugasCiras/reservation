@@ -21,14 +21,12 @@ export default function RoomReservations() {
       <Row gutter={[16, 16]}>
         {reservations.map((reservation) => (
           <Col xs={24} sm={12} lg={8} key={reservation.id}>
-            <Space direction="vertical">
-              <ReservationCard
+            <ReservationCard
                 reservation={reservation}
                 onRevoke={() => {
                   fetchReservations();
                 }}
               />
-            </Space>
           </Col>
         ))}
       </Row>

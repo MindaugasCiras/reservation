@@ -8,6 +8,22 @@ import java.util.Date;
 import java.util.List;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
-    @Query(value = "select ro from Room ro where ro.id not in (select r.id from Room r where exists(select 1 from Reservation res where res.room = r and res.bookedTo <= :to and res.bookedFrom >= :from))")
+    @Query(value = """
+            select ro from Room ro where
+            ro.id not in
+                (select r.id from Room r where r.id in
+                    (
+                        select res.room.id from Reservation res where
+                        res.room = r and
+                        (res.bookedFrom >= :from and res.bookedTo <= :to)
+                            or
+                        (res.bookedFrom <= :from and res.bookedTo >= :to)
+                            or
+                        (res.bookedFrom >= :from and res.bookedFrom <= :to and res.bookedTo >= :to)
+                            or
+                        (res.bookedTo <= :to and res.bookedTo >= :from and res.bookedFrom <= :from)
+                    )
+                )
+            """)
     List<Room> getAvailableRooms(Date from, Date to);
 }

@@ -61,6 +61,7 @@ i18n
               breakfast: "Breakfast",
               dailyClean: "Daily clean",
               revoke: "Revoke",
+              comment: "Comment",
               revokeConfirmation: {
                 title: "Revoke this reservation",
                 description: "Are you sure?",
@@ -172,6 +173,7 @@ i18n
               breakfast: "Pusryčiai",
               dailyClean: "Kasdienis valymas",
               revoke: "Atšaukti",
+              comment: "Komentaras",
               revokeConfirmation: {
                 title: "Rezervacijos atšaukimas",
                 description: "Ar tikrai norite atšaukti šią rezervaciją?",

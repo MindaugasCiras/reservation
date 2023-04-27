@@ -5,7 +5,7 @@ export const getAllRooms = () => {
 };
 
 export const getAvailableRooms = (dateFrom, dateTo) => {
-  return client.get("/rooms", {
+  return client.get("/rooms/available", {
     params: {
       from: dateFrom,
       to: dateTo,

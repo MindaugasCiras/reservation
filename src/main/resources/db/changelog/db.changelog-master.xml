@@ -1,0 +1,14 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="initialData" author="Ciras" failOnError="false">
+        <sql>
+            insert into users (authorities, password, username, id) values ('ADMIN',
+            '$2a$10$PkWO.5THI6Z8M8p5pdUNu.7nkfOJ.vOdPJ8v4mo5SNFCnuQ1l5PQC', 'admin', 100001);
+            insert into users (authorities, password, username, id) values ('USER',
+            '$2a$10$PkWO.5THI6Z8M8p5pdUNu.7nkfOJ.vOdPJ8v4mo5SNFCnuQ1l5PQC', 'test', 100002);
+            insert into users (authorities, password, username, id) values ('USER',
+            '$2a$10$PkWO.5THI6Z8M8p5pdUNu.7nkfOJ.vOdPJ8v4mo5SNFCnuQ1l5PQC', 'test2', 100003);
+        </sql>
+    </changeSet>
+</databaseChangeLog>

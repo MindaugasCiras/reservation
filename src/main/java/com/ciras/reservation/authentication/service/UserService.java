@@ -5,6 +5,8 @@ import com.ciras.reservation.authentication.model.RegisterRequest;
 import com.ciras.reservation.authentication.model.Role;
 import com.ciras.reservation.authentication.model.User;
 import com.ciras.reservation.authentication.repository.UserRepository;
+import com.ciras.reservation.reservations.model.Reservation;
+import com.ciras.reservation.reservations.repository.ReservationRepository;
 import com.ciras.reservation.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,6 +31,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final HttpServletRequest req;
     private final AuthenticationManager authenticationManager;
+    private final ReservationRepository reservationRepository;
 
     public void register(RegisterRequest registerRequest) {
         User user = new User();
@@ -63,6 +66,8 @@ public class UserService {
 
     public void deleteUser(Long id) {
         if (SecurityUtil.isAdmin()) {
+            List<Reservation> reservations = reservationRepository.findWhereUserId(id);
+            reservations.forEach(reservationRepository::delete);
             userRepository.deleteById(id);
         } else {
             throw new RuntimeException("Not admin");
