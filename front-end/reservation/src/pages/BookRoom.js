@@ -33,14 +33,20 @@ export default function BookRoom() {
 
   const onFinish = async (values) => {
     const url = new URL(window.location.href);
-    await bookRoom({
+    const res = await bookRoom({
       roomId: room.id,
       ...values,
       bookedFrom: url.searchParams.get("from"),
       bookedTo: url.searchParams.get("to"),
+    }).catch((err) => {
+      console.log(err);
+      message.error(t("messages.error"));
+      return err;
     });
-    message.success("Room reserved");
-    nav("/reservations");
+    if (res.status == 200) {
+      message.success("Room reserved");
+      nav("/reservations");
+    }
   };
 
   return (
@@ -85,8 +91,8 @@ export default function BookRoom() {
       const url = new URL(window.location.href);
       const bookedFrom = dayjs(url.searchParams.get("from"));
       const bookedTo = dayjs(url.searchParams.get("to"));
-      const price = res.data.price * bookedTo.diff(bookedFrom, 'd');
-      setRoom({...res.data, price});
+      const price = res.data.price * bookedTo.diff(bookedFrom, "d");
+      setRoom({ ...res.data, price });
     });
   }
 }

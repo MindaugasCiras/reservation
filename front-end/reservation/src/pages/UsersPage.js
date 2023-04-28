@@ -15,6 +15,10 @@ export default function UsersPage() {
   function updateUsers() {
     getUsers().then((data) => {
       setUsers(data.data);
+    }).catch((err) => {
+      console.log(err);
+      message.error(t("messages.error"));
+      return err;
     });
   }
   return (

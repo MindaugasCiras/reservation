@@ -1,5 +1,15 @@
 import React from "react";
-import { Button, Checkbox, Form, Input, Card, Space, Row, Col, message } from "antd";
+import {
+  Button,
+  Checkbox,
+  Form,
+  Input,
+  Card,
+  Space,
+  Row,
+  Col,
+  message,
+} from "antd";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../service/AuthService";
 import { useTranslation } from "react-i18next";
@@ -9,9 +19,13 @@ export default function RegisterPage() {
   const { t } = useTranslation();
 
   const onFinish = async (values) => {
-    const res = await registerUser(values);
+    const res = await registerUser(values).catch((err) => {
+      console.log(err);
+      message.error(t("messages.error"));
+      return err;
+    });
     if (res.status == 200) {
-      message.success(t("messages.registered"))
+      message.success(t("messages.registered"));
       navigate("/log-in");
     }
   };
@@ -46,7 +60,10 @@ export default function RegisterPage() {
             label={t("auth.username")}
             name="username"
             rules={[
-              { required: true, message: t("auth.validation.username.required") },
+              {
+                required: true,
+                message: t("auth.validation.username.required"),
+              },
               { min: 4, message: t("auth.validation.username.tooShort") },
             ]}
           >
@@ -57,7 +74,10 @@ export default function RegisterPage() {
             label={t("auth.password")}
             name="password"
             rules={[
-              { required: true, message: t("auth.validation.password.required") },
+              {
+                required: true,
+                message: t("auth.validation.password.required"),
+              },
               { min: 6, message: t("auth.validation.password.tooShort") },
             ]}
           >
@@ -79,9 +99,7 @@ export default function RegisterPage() {
                     return Promise.resolve();
                   }
                   return Promise.reject(
-                    new Error(
-                      t("auth.validation.repeatPassword.noMatch")
-                    )
+                    new Error(t("auth.validation.repeatPassword.noMatch"))
                   );
                 },
               }),
@@ -93,7 +111,7 @@ export default function RegisterPage() {
             <Col>
               <Form.Item noStyle>
                 <Button type="primary" htmlType="submit">
-                {t("auth.registerButton")}
+                  {t("auth.registerButton")}
                 </Button>
               </Form.Item>
             </Col>
@@ -104,7 +122,8 @@ export default function RegisterPage() {
                   onClick={() => {
                     navigate("/log-in");
                   }}
-                >{t("auth.loginButton")}
+                >
+                  {t("auth.loginButton")}
                 </Button>
               </Form.Item>
             </Col>

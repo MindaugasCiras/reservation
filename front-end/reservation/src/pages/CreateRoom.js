@@ -23,9 +23,16 @@ export default function CreateRoom() {
   const nav = useNavigate();
   const imageUrl = Form.useWatch("imageUrl", { form });
   const onFinish = async (values) => {
-    await createRoom(values);
-    message.success(t("messages.created"));
-    nav("..");
+    createRoom(values)
+      .catch((err) => {
+        console.log(err);
+        message.error(t("messages.error"));
+        return err;
+      })
+      .then((res) => {
+        message.success(t("messages.created"));
+        nav("..");
+      });
   };
 
   const onFinishFailed = (errorInfo) => {

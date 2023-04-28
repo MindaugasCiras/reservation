@@ -36,8 +36,14 @@ export default function EditRoom() {
   }, [room]);
 
   const onFinish = async (values) => {
-    await updateRoom(room.id, values);
-    message.success(t("messages.updated"));
+    const res = await updateRoom(room.id, values).catch((err) => {
+      console.log(err);
+      message.error(t("messages.error"));
+      return err;
+    });
+    if (res.status == 200) {
+      message.success(t("messages.updated"));
+    }
   };
 
   const onFinishFailed = (errorInfo) => {

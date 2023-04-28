@@ -1,4 +1,4 @@
-import { Col, Row, DatePicker, Space, Button, Divider } from "antd";
+import { Col, Row, DatePicker, Space, Button, Divider, message } from "antd";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Outlet } from "react-router-dom";
@@ -23,7 +23,11 @@ export default function SearchRooms() {
     const roomsRes = await getAvailableRooms(
       value[0].format("YYYY-MM-DD"),
       value[1].format("YYYY-MM-DD")
-    );
+    ).catch((err) => {
+      console.log(err);
+      message.error(t("messages.error"));
+      return err;
+    });
     setRooms(roomsRes.data);
   };
 

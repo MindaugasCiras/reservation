@@ -16,7 +16,6 @@ export default function ReservationCard(props) {
   return (
     <Card
       style={{ height: "100%" }}
-      hoverable
       cover={
         imageExists(room.imageUrl) ? (
           <img alt="room_image" src={room.imageUrl} />

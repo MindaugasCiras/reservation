@@ -4,7 +4,7 @@ import {
   MailOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 import React, { useContext, useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { AuthenticationContext } from "../context";
@@ -14,17 +14,19 @@ export default function HomePage() {
   const { authData, setAuthData } = useContext(AuthenticationContext);
   const nav = useNavigate();
   const { t, i18n } = useTranslation();
+
   useEffect(() => {
     if (authData.loggedIn !== true) {
+      localStorage.removeItem("authData");
       nav("/log-in");
+    } else {
+      localStorage.setItem("authData", JSON.stringify(authData));
     }
     return () => {};
   }, [authData]);
 
   const location = useLocation();
-  const [current, setCurrent] = useState();
   const onClick = (e) => {
-    setCurrent(e.key);
     if (e.key === "logout") {
       setAuthData({});
       return;
@@ -74,7 +76,7 @@ export default function HomePage() {
           defaultValue={i18n.resolvedLanguage}
           onChange={(value) => {
             i18n.changeLanguage(value);
-            dayjs.locale(value)
+            dayjs.locale(value);
           }}
           style={{ width: 120 }}
           options={[

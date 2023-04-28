@@ -1,4 +1,4 @@
-import { Col, Divider, Row, Space } from "antd";
+import { Col, Divider, message, Row, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Outlet } from "react-router-dom";
@@ -36,6 +36,10 @@ export default function RoomReservations() {
   function fetchReservations() {
     getReservations().then((res) => {
       setReservations(res.data);
-    });
+    }).catch((err) => {
+      console.log(err);
+      message.error(t("messages.error"));
+      return err;
+    });;
   }
 }

@@ -25,20 +25,23 @@ import CreateRoom from "./pages/CreateRoom";
 import BookRoom from "./pages/BookRoom";
 import { ConfigProvider } from "antd";
 import { useTranslation } from "react-i18next";
-import 'dayjs/locale/lt';
+import "dayjs/locale/lt";
 import ltLT from "antd/locale/lt_LT";
-import enUS from 'antd/locale/en_US';
+import enUS from "antd/locale/en_US";
 function App() {
-  const [authData, setAuthData] = useState({});
-  const value = useMemo(() => ({ authData, setAuthData }), [authData]);
-  useEffect(() => {
-    if (authData.loggedIn == true) {
+  const [authData, setAuthData] = useState(() => {
+    const dataFromStorage = localStorage.getItem("authData");
+    console.log(JSON.parse(dataFromStorage));
+    if (dataFromStorage != null) {
+      return JSON.parse(dataFromStorage);
     }
-  }, [authData]);
+    return {};
+  });
+  const value = useMemo(() => ({ authData, setAuthData }), [authData]);
 
   const { i18n } = useTranslation();
   return (
-    <ConfigProvider locale={i18n.resolvedLanguage=="en"?enUS:ltLT}>
+    <ConfigProvider locale={i18n.resolvedLanguage == "en" ? enUS : ltLT}>
       <AuthenticationContext.Provider value={value}>
         <BrowserRouter>
           <Routes>
@@ -68,14 +71,6 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
           </Routes>
         </BrowserRouter>
-        {/* {useMemo(
-        () => (
-          <div className="App">
-            <RouterProvider router={router} />
-          </div>
-        ),
-        []
-      )} */}
       </AuthenticationContext.Provider>
     </ConfigProvider>
   );
