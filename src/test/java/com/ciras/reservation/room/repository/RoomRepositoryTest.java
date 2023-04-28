@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import static com.ciras.reservation.util.DateUtil.getDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
@@ -29,8 +30,6 @@ class RoomRepositoryTest {
     private ReservationRepository reservationRepository;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private EntityManager entityManager;
 
     private static Room createRoom(String name) {
         Room room = new Room();
@@ -38,12 +37,6 @@ class RoomRepositoryTest {
         room.setPrice(BigInteger.TEN);
         return room;
     }
-
-    private Date getDate(String date) throws ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return dateFormat.parse(date);
-    }
-
     @Test
     void returnsRoomWithoutReservation() throws ParseException {
         Room room = createRoom("A name");

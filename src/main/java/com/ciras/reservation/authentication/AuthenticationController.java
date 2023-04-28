@@ -5,6 +5,7 @@ import com.ciras.reservation.authentication.model.RegisterRequest;
 import com.ciras.reservation.authentication.model.User;
 import com.ciras.reservation.authentication.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +33,10 @@ public class AuthenticationController {
         return userService.login(loginRequest);
     }
 
+    @GetMapping("/ping")
+    public ResponseEntity ping() {
+        return ResponseEntity.ok().build();
+    }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/users")

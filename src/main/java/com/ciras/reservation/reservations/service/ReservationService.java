@@ -15,6 +15,7 @@ import org.springframework.web.client.RestClientException;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -54,7 +55,7 @@ public class ReservationService {
             if (!SecurityUtil.isAdmin()) {
                 User user = SecurityUtil.getUser();
                 if (!Objects.equals(reservation.getUser().getId(), user.getId())) {
-                    return;
+                    throw new RuntimeException("Not owning the reservation");
                 }
             }
             reservationRepository.delete(reservation);
@@ -64,10 +65,27 @@ public class ReservationService {
     public Reservation updateReservation(Long id, AddReservationRequest addReservationRequest) {
         Reservation reservation = getReservation(id);
         BeanUtils.copyProperties(addReservationRequest, reservation);
+        if (!SecurityUtil.isAdmin()) {
+            User user = SecurityUtil.getUser();
+            if (!Objects.equals(reservation.getUser().getId(), user.getId())) {
+                throw new RuntimeException("Not owning the reservation");
+            }
+        }
         return reservationRepository.save(reservation);
     }
 
     public Reservation getReservation(Long id) {
-        return reservationRepository.findById(id).orElseThrow(() -> new RestClientException("Reservation not found"));
+        Optional<Reservation> optionalReservation = reservationRepository.findById(id);
+        if (optionalReservation.isPresent()) {
+            Reservation reservation = optionalReservation.get();
+            if (!SecurityUtil.isAdmin()) {
+                User user = SecurityUtil.getUser();
+                if (!Objects.equals(reservation.getUser().getId(), user.getId())) {
+                    throw new RuntimeException("Not owning the reservation");
+                }
+            }
+            return reservation;
+        }
+        throw new RestClientException("Reservation not found");
     }
 }

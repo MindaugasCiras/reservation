@@ -10,11 +10,3 @@ spring:
     hibernate.ddl-auto: create-drop
     database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: true
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
-        use_sql_comments: true
-      show-sql: true
-log4j.logger.org.hibernate.SQL: DEBUG
-log4j.logger.org.hibernate.type: TRACE
