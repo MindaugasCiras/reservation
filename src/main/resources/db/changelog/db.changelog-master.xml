@@ -8,7 +8,7 @@
                 bed_count int4 NOT NULL,
                 capacity int4 NOT NULL,
                 image_url varchar(255) NULL,
-                "name" varchar(255) NULL,
+                name varchar(255) NULL,
                 price numeric(19, 2) NOT NULL,
                 size_sqm float8 NOT NULL,
                 CONSTRAINT room_pkey PRIMARY KEY (id)
@@ -30,7 +30,7 @@
                 booked_from timestamp NOT NULL,
                 booked_to timestamp NOT NULL,
                 breakfast bool NOT NULL,
-                "comment" varchar(255) NULL,
+                comment varchar(255) NULL,
                 daily_cleaning bool NOT NULL,
                 price numeric(19, 2) NULL,
                 room_id int8 NULL,
@@ -53,11 +53,11 @@
             '$2a$10$PkWO.5THI6Z8M8p5pdUNu.7nkfOJ.vOdPJ8v4mo5SNFCnuQ1l5PQC', 'test2', 100003);
 
             INSERT INTO room
-            (id, bed_count, capacity, image_url, "name", price, size_sqm)
+            (id, bed_count, capacity, image_url, name, price, size_sqm)
             VALUES(1, 2, 2, 'https://images.pexels.com/photos/1571458/pexels-photo-1571458.jpeg', 'Loze', 100.00, 50.0);
 
             INSERT INTO room
-            (id, bed_count, capacity, image_url, "name", price, size_sqm)
+            (id, bed_count, capacity, image_url, name, price, size_sqm)
             VALUES(2, 2, 4,
             'https://img.freepik.com/free-photo/green-sofa-white-living-room-with-free-space_43614-834.jpg',
             'Sviesusis', 200.00, 60.0);
