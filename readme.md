@@ -1,12 +1,19 @@
-### Reservations
+# Reservations
 
-To run project
+### Prerequisites
 
-- With h2 database `./gradlew bootRun --args='--spring.profiles.active=h2`
-- With postgres (default) database `./gradlew bootRun`
-- With debug mode `./gradlew bootRun --args='--spring.profiles.active=debug`
+- java 17
+- docker
+- docker-compose
 
-Setup accounts
+### To run project
+
+- With h2 database `./mvnw clean install spring-boot:run -Dspring-boot.run.profiles=h2`
+- With postgres database `./mvnw clean install spring-boot:run -Dspring-boot.run.profiles=postgres`
+    - Before running make sure to start postgres DB using `docker-compose up postgres -d`
+- With debug mode `./mvnw clean install spring-boot:run -Dspring-boot.run.profiles=h2,debug`
+
+#### Setup accounts
 
 | Role  | username | password |
 |-------|----------|----------|

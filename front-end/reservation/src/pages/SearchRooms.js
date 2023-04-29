@@ -53,7 +53,7 @@ export default function SearchRooms() {
       <div style={{ height: "20px" }}></div>
       <Row gutter={[16, 16]}>
         {rooms.map((room) => (
-          <Col xs={24} sm={12} lg={8} >
+          <Col xs={24} sm={12} lg={8} key={room.id}>
             <Link
               to={`/search/${room.id}/book?from=${value[0].format(
                 "YYYY-MM-DD"

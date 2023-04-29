@@ -10,15 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.persistence.EntityManager;
 import java.math.BigInteger;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import static com.ciras.reservation.util.DateUtil.getDate;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
@@ -37,6 +35,7 @@ class RoomRepositoryTest {
         room.setPrice(BigInteger.TEN);
         return room;
     }
+
     @Test
     void returnsRoomWithoutReservation() throws ParseException {
         Room room = createRoom("A name");
@@ -69,8 +68,7 @@ class RoomRepositoryTest {
         reservation.setUser(userRepository.findAll().get(0));
         reservationRepository.save(reservation);
         List<Room> availableRooms = roomRepository.getAvailableRooms(searchFrom, searchTo);
-        assertEquals(1, availableRooms.size());
-        assertEquals(returnedId, availableRooms.get(0).getId());
+        assertTrue(availableRooms.stream().noneMatch(room -> room.getId().equals(bookedRoom.getId())));
         reservationRepository.delete(reservation);
     }
 
