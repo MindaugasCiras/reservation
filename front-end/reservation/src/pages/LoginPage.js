@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Button, Checkbox, Form, Input, Card, Space, Row, Col, message } from "antd";
+import { Button, Form, Input, Card, Space, Row, Col, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../service/AuthService";
 import { AuthenticationContext } from "../context";
@@ -16,7 +16,7 @@ export default function LoginPage() {
       message.error(t("messages.error"));
       return err;
     });
-    if (res.status == 200) {
+    if (res.status === 200) {
       const auth = { loggedIn: true, ...res.data };
       setAuthData({ ...auth, isAdmin: isAdmin(auth) });
       navigate("/");

@@ -1,14 +1,10 @@
 import React from "react";
 import {
-  Button,
-  Checkbox,
-  Form,
+  Button, Form,
   Input,
-  Card,
-  Space,
-  Row,
+  Card, Row,
   Col,
-  message,
+  message
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../service/AuthService";
@@ -24,7 +20,7 @@ export default function RegisterPage() {
       message.error(t("messages.error"));
       return err;
     });
-    if (res.status == 200) {
+    if (res.status === 200) {
       message.success(t("messages.registered"));
       navigate("/log-in");
     }

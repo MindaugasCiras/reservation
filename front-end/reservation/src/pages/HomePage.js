@@ -1,14 +1,10 @@
-import { Layout, Menu, notification, Select, Space } from "antd";
-import {
-  AppstoreOutlined,
-  MailOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
+import { Menu, notification, Select, Space } from "antd";
 import dayjs from "dayjs";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { AuthenticationContext } from "../context";
 import { useTranslation } from "react-i18next";
+import { logOutUser } from "../service/AuthService";
 export default function HomePage() {
   const [api, contextHolder] = notification.useNotification();
   const { authData, setAuthData } = useContext(AuthenticationContext);
@@ -26,8 +22,9 @@ export default function HomePage() {
   }, [authData]);
 
   const location = useLocation();
-  const onClick = (e) => {
+  const onClick = async (e) => {
     if (e.key === "logout") {
+      await logOutUser();
       setAuthData({});
       return;
     }

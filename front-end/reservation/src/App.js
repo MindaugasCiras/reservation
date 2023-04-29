@@ -1,20 +1,14 @@
-import logo from "./logo.svg";
 import "./App.css";
 import LoginPage from "./pages/LoginPage";
 import {
-  createBrowserRouter,
-  redirect,
-  RouterProvider,
-  useNavigation,
   BrowserRouter,
   Routes,
   Route,
 } from "react-router-dom";
-import axios from "axios";
 
 import RegisterPage from "./pages/RegisterPage";
 import { AuthenticationContext } from "./context";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import HomePage from "./pages/HomePage";
 import SearchRooms from "./pages/SearchRooms";
 import RoomReservations from "./pages/RoomReservations";
@@ -41,7 +35,7 @@ function App() {
 
   const { i18n } = useTranslation();
   return (
-    <ConfigProvider locale={i18n.resolvedLanguage == "en" ? enUS : ltLT}>
+    <ConfigProvider locale={i18n.resolvedLanguage === "en" ? enUS : ltLT}>
       <AuthenticationContext.Provider value={value}>
         <BrowserRouter>
           <Routes>

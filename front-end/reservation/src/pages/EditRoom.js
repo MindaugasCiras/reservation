@@ -1,15 +1,11 @@
 import {
-  Button,
-  Checkbox,
-  Col,
+  Button, Col,
   Divider,
   Form,
   Input,
   InputNumber,
-  message,
-  notification,
-  Popconfirm,
-  Row,
+  message, Popconfirm,
+  Row
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

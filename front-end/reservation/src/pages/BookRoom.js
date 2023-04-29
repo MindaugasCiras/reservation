@@ -3,12 +3,9 @@ import {
   Checkbox,
   Col,
   Divider,
-  Form,
-  Input,
-  InputNumber,
-  message,
+  Form, message,
   notification,
-  Row,
+  Row
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import React, { useEffect, useState } from "react";
@@ -17,7 +14,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import RoomCard from "../components/RoomCard";
 import { bookRoom } from "../service/ReservationService";
 import dayjs from "dayjs";
-import { deleteRoom, getRoom, updateRoom } from "../service/RoomService";
+import { getRoom } from "../service/RoomService";
 
 export default function BookRoom() {
   const { t } = useTranslation();
@@ -43,7 +40,7 @@ export default function BookRoom() {
       message.error(t("messages.error"));
       return err;
     });
-    if (res.status == 200) {
+    if (res.status === 200) {
       message.success("Room reserved");
       nav("/reservations");
     }

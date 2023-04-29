@@ -3,6 +3,7 @@ package com.ciras.reservation.config;
 import com.ciras.reservation.authentication.service.ReservationUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -13,6 +14,7 @@ import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.List;
@@ -23,7 +25,7 @@ public class WebSecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/auth/log-in","/auth/register", "/v2/api-docs",
+        http.authorizeRequests().antMatchers("/auth/log-in", "/auth/register", "/v2/api-docs",
                         "/swagger-resources",
                         "/swagger-resources/**",
                         "/configuration/ui",
@@ -42,7 +44,10 @@ public class WebSecurityConfiguration {
                     corsConfiguration.setAllowCredentials(true);
                     corsConfiguration.setAllowedMethods(List.of("GET", "DELETE", "PUT", "POST"));
                     return corsConfiguration.applyPermitDefaultValues();
-                }));
+                }))
+                .logout()
+                .logoutUrl("/auth/log-out")
+                .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)));
         return http.build();
     }
 

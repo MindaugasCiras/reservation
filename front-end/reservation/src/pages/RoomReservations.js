@@ -1,9 +1,7 @@
-import { Col, Divider, message, Row, Space } from "antd";
+import { Col, Divider, message, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Outlet } from "react-router-dom";
 import ReservationCard from "../components/ReservationCard";
-import RoomCard from "../components/RoomCard";
 import { getReservations } from "../service/ReservationService";
 
 export default function RoomReservations() {
