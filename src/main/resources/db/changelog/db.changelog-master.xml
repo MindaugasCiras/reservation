@@ -4,7 +4,7 @@
     <changeSet id="tables" author="Ciras">
         <sql>
             CREATE TABLE IF NOT EXISTS room (
-                id int8 auto_increment NOT NULL,
+                id SERIAL NOT NULL,
                 bed_count int4 NOT NULL,
                 capacity int4 NOT NULL,
                 image_url varchar(255) NULL,
@@ -16,7 +16,7 @@
 
 
             CREATE TABLE IF NOT EXISTS users (
-                id int8 auto_increment NOT NULL,
+                id SERIAL NOT NULL,
                 authorities varchar(255) NULL,
                 password varchar(255) NULL,
                 username varchar(255) NOT NULL,
@@ -26,7 +26,7 @@
 
 
             CREATE TABLE IF NOT EXISTS reservation (
-                id int8 auto_increment NOT NULL,
+                id SERIAL NOT NULL,
                 booked_from timestamp NOT NULL,
                 booked_to timestamp NOT NULL,
                 breakfast bool NOT NULL,
